@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+console.log('welcome use qc-cli');
+const program = require('commander');
+
+program
+    .version(require('../package.json').version)
+    .usage('<command> [options>')
+    .command('add', 'add a new template')
+    .command('delete', 'delete a template')
+    .command('list', 'list all the template')
+    .command('init', 'generate a new project form a template');
+
+program.parse(process.argv);
