@@ -16,12 +16,17 @@
   "bugs": {
     "url": "https://github.com/jermken/qc-cli/issues"
   },
+  "bin": {
+    "qc": "bin/qc",
+    "qc-init": "bin/qc-init"
+  },
   "homepage": "https://github.com/jermken/qc-cli#readme",
   "dependencies": {
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "download-git-repo": "^1.1.0",
     "inquirer": "^6.2.2",
-    "ora": "^3.2.0"
+    "ora": "^3.2.0",
+    "rimraf": "^2.6.3"
   }
 }

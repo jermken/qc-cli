@@ -1,4 +1,2 @@
-package-lock.json
-node_modules
-.vscode
-.history
+./node_modules
+./package-lock.json
