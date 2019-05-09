@@ -8,5 +8,29 @@ program
   .version(require('../package').version)
   .usage('<command> [options]')
   .command('init', 'generate a new project from a template')
+  .command('dev', 'run a project in development')
+
+// 初始化项目
+program
+  .command('create')
+  .option('-l, --library <library>', 'select library')
+  .option('-t, --tool <tool>', 'select tool')
+  .action((entry, cmd) => {
+    require('../commands/create.js')(entry, cmd)
+  })
+
+// 项目构建-测试环境
+program
+  .command('dev')
+  .action((entry, cmd) => {
+    require('../commands/dev.js')(entry, cmd)
+  })
+
+// 项目构建-测试环境
+program
+  .command('build')
+  .action((entry, cmd) => {
+    require('../commands/build.js')(entry, cmd)
+  })
 // 解析命令行参数
 program.parse(process.argv)

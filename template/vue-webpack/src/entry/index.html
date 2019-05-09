@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= htmlWebpackPlugin.options.title %></title>
+	<% if (htmlWebpackPlugin.options.env === 'development') {%>
+	<script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+	<% } %>
+	<% if (htmlWebpackPlugin.options.env === 'production') {%>
+	<script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+	<% } %>
+</head>
+<body>
+	<div id="app">
+
+	</div>
+	<% if (htmlWebpackPlugin.options.env === 'development') {%>
+	<script src="index.js"></script>
+	<% } %>
+</body>
+</html>

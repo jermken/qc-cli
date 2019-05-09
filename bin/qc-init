@@ -5,15 +5,14 @@ const ora = require('ora')
 const fs = require('fs')
 const download = require('download-git-repo')
 const rimraf = require('rimraf')
-const fsHelp = require('../lib/util/fsHelp.js')
+const { execSync } = require('child_process')
 const tplObj = require(`${__dirname}/../template`)
 const _cwd = process.cwd()
-console.log(_cwd)
+
 program
     .usage('<template-name> [project-name]')
 program.parse(process.argv)
 
-console.log(program.args)
 
 if (program.args.length < 1) return program.help()
 
@@ -35,17 +34,16 @@ console.log(chalk.white('\n Start generating... \n'))
 const spinner = ora('Downloading...')
 spinner.start()
 if(fs.existsSync(`${_cwd}/${projectName}`)) {
-    fsHelp.clearDir(`${_cwd}/${projectName}`)
-    //rimraf.sync(`${_cwd}/${projectName}`)
+    execSync(`rm -rf ${projectName}`)
 }
-// download(url, projectName, err => {
-//     if (err) {
-//         spinner.fail()
-//         console.log(chalk.red(`Generation failed. ${err}`))
-//         return
-//     }
-//     spinner.succeed()
-//     console.log(chalk.green('\n generation completed!'))
-//     console.log('\n To get started')
-//     console.log(`\n cd ${projectName} \n`)
-// })
+download(url, projectName, err => {
+    if (err) {
+        spinner.fail()
+        console.log(chalk.red(`Generation failed. ${err}`))
+        return
+    }
+    spinner.succeed()
+    console.log(chalk.green('\n generation completed!'))
+    console.log('\n To get started')
+    console.log(`\n cd ${projectName} \n`)
+})
