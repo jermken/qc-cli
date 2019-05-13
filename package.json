@@ -51,6 +51,7 @@
     "inquirer": "^6.2.2",
     "mini-css-extract-plugin": "^0.4.2",
     "node-sass": "^4.11.0",
+    "open": "^6.3.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "ora": "^3.2.0",
     "rimraf": "^2.6.3",

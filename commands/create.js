@@ -4,6 +4,7 @@ const path = require('path')
 const rimraf = require('rimraf')
 const copyTpl = require('../lib/util/copyTpl')
 const _cwd = process.cwd()
+
 module.exports = (entry, cmd) => {
     if (!cmd) {
         console.log(chalk.red('error: 请指定项目名'))
