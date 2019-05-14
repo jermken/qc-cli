@@ -1,5 +1,5 @@
 {
-  "name": "qc-cli",
+  "name": "@jermken/qc-cli",
   "version": "1.0.0",
   "description": "this is a cli for front-end project",
   "scripts": {
