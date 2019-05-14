@@ -1,7 +1,4 @@
 {
     "name": "vue-demo",
-    "version": "1.0.0",
-    "dependencies": {
-        "vue": "2.6.10"
-    }
+    "version": "1.0.0"
 }

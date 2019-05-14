@@ -2,7 +2,6 @@
   "name": "qc-cli",
   "version": "1.0.0",
   "description": "this is a cli for front-end project",
-  "main": "index.js",
   "scripts": {
     "dev": "node ./bin/qc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/jermken/qc-cli.git"
   },
-  "author": "",
+  "author": "jermken",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jermken/qc-cli/issues"

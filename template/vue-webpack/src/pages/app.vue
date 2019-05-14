@@ -18,7 +18,7 @@ export default {
         }
     },
     mounted() {
-        console.log(12121211)
+
     }
 }
 </script>
