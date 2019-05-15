@@ -2,11 +2,10 @@ const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const babelOptions = require('../common/babel_options')()
-const _cwd = process.cwd()
 
 module.exports = {
     entry: {
-        index: path.join(_cwd, './src/entry/index.js')
+        index: path.join(process.env._CWD, './src/entry/index.js')
     },
     output: {
         chunkFilename: 'js/[name].bundle.[hash:8].js'
@@ -20,7 +19,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                include: [path.join(_cwd, './src')],
+                include: [path.join(process.env._CWD, './src')],
                 use: {
                     loader: require.resolve('babel-loader'),
                     options: babelOptions
@@ -32,7 +31,7 @@ module.exports = {
                     process.env.NODE_ENV !== 'production' ? require.resolve('vue-style-loader') : {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            publicPath: path.join(_cwd, '../')
+                            publicPath: path.join(process.env._CWD, '../')
                         }
                     }, require.resolve('css-loader'), require.resolve('sass-loader')
                 ]
@@ -56,15 +55,12 @@ module.exports = {
     plugins:[
         new VueLoaderPlugin()
     ],
-    // resolveLoader: {
-    //     modules: [path.resolve(__dirname, '../../node_modules')]
-    // },
     resolve: {
         extensions: ['.vue', '.js'],
         alias: {
-            '@': path.join(_cwd, './src')
+            '@': path.join(process.env._CWD, './src')
         },
-        modules: [path.resolve(__dirname, '../../node_modules'), path.resolve(_cwd, './node_modules')]
+        modules: [path.resolve(__dirname, '../../node_modules'), path.resolve(process.env._CWD, './node_modules')]
     },
     externals: {
         'vue': 'Vue',

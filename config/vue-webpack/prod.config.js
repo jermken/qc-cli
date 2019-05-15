@@ -6,27 +6,27 @@ const baseConf = require('./base.config')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const _cwd = process.cwd()
+const qcConfig = require(path.resolve(process.env._CWD, './qc.config.json'))
 
 module.exports = merge(baseConf, {
     mode: process.env.NODE_ENV,
     output: {
-        path: path.join(_cwd, './dist'),
+        path: path.join(process.env._CWD, './dist'),
         filename: 'js/index.[hash:8].js'
     },
     module: {
 
     },
     plugins: [
-        new cleanWebpackPlugin(['dist'], {root: _cwd}), // root 必配
+        new cleanWebpackPlugin(['dist'], {root: process.env._CWD}), // root 必配
         new MiniCssExtractPlugin({
             filename: 'css/main.[hash:8].css',
             chunkFilename: 'css/[name].[hash:8].css'
         }),
         new htmlWebpackPlugin({
-            title: 'vue-demo',
+            title: qcConfig.title,
             filename: 'index.html',
-            template: path.join(_cwd, './src/entry/index.html'),
+            template: path.join(process.env._CWD, './src/entry/index.html'),
             chunks: ['index'],
             env: process.env.NODE_ENV,
             inject: true,

@@ -1,0 +1,4 @@
+{
+    "lib": "vue",
+    "packer": "webpack"
+}
