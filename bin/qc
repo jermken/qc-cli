@@ -8,13 +8,10 @@ const inquirer = require('inquirer')
 program
   .version(require('../package').version, '-v, --version')
   .usage('<command> [options]')
-  .command('create', 'generate a new project from a template')
-  .command('dev', 'run a project in development')
-  .command('build', 'run a project in production')
 
 // 初始化项目
 program
-  .command('create')
+  .command('create', 'generate a new project from a template')
   .action((dir, cmd) => {
     const prompt = inquirer.createPromptModule()
     const questions = [{
@@ -48,20 +45,20 @@ program
 
 // 项目构建-测试环境
 program
-  .command('dev')
+  .command('dev', 'run a project in development')
   .action((dir, cmd) => {
     require('../commands/dev.js')(dir, cmd)
   })
 
 // 项目构建-测试环境
 program
-  .command('build')
+  .command('build', 'run a project in production')
   .action((dir, cmd) => {
     require('../commands/build.js')(dir, cmd)
   })
 
 let initCommander = process.argv[2]
-if(initCommander && !/(create|dev|build)/.test(initCommander)) {
+if(initCommander && !/(create|dev|build|-v|-h|--version|--help)/.test(initCommander)) {
   logger.error(`command:  qc ${initCommander} is not supported`)
   process.exit(1)
 }
