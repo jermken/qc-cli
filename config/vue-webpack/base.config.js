@@ -63,7 +63,6 @@ module.exports = {
         modules: [path.resolve(__dirname, '../../node_modules'), path.resolve(process.env._CWD, './node_modules')]
     },
     externals: {
-        'vue': 'Vue',
-        'element-ui': 'ELEMENT'
+        'vue': 'Vue'
     }
 }

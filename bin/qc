@@ -1,35 +1,69 @@
 #!/usr/bin/env node
 const program = require('commander')
+const logger = require('../lib/util/logger')
+const inquirer = require('inquirer')
 // 定义当前版本
 // 定义使用方法
 // 定义指令
 program
-  .version(require('../package').version)
+  .version(require('../package').version, '-v, --version')
   .usage('<command> [options]')
-  .command('init', 'generate a new project from a template')
+  .command('create', 'generate a new project from a template')
   .command('dev', 'run a project in development')
+  .command('build', 'run a project in production')
 
 // 初始化项目
 program
   .command('create')
-  .option('-l, --library <library>', 'select library')
-  .option('-t, --tool <tool>', 'select tool')
-  .action((entry, cmd) => {
-    require('../commands/create.js')(entry, cmd)
+  .action((dir, cmd) => {
+    const prompt = inquirer.createPromptModule()
+    const questions = [{
+      type: 'input',
+      name: 'name',
+      message: 'please input your project name',
+      validate: function(input) {
+        if(!input) {
+          return 'project name is required'
+        } else {
+          return true
+        }
+      }
+    }, {
+      type: 'list',
+      name: 'library',
+      message: 'select a library for your project',
+      choices: ['vue']
+    }, {
+      type: 'list',
+      name: 'tool',
+      message: 'select a packer tool for your project',
+      choices: ['webpack']
+    }]
+    prompt(questions).then((data) => {
+      require('../commands/create.js')(data)
+    }).catch(() => {
+      process.exit(1)
+    })
   })
 
 // 项目构建-测试环境
 program
   .command('dev')
-  .action((entry, cmd) => {
-    require('../commands/dev.js')(entry, cmd)
+  .action((dir, cmd) => {
+    require('../commands/dev.js')(dir, cmd)
   })
 
 // 项目构建-测试环境
 program
   .command('build')
-  .action((entry, cmd) => {
-    require('../commands/build.js')(entry, cmd)
+  .action((dir, cmd) => {
+    require('../commands/build.js')(dir, cmd)
   })
+
+let initCommander = process.argv[2]
+if(initCommander && !/(create|dev|build)/.test(initCommander)) {
+  logger.error(`command:  qc ${initCommander} is not supported`)
+  process.exit(1)
+}
 // 解析命令行参数
 program.parse(process.argv)
