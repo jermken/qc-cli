@@ -8,23 +8,19 @@ const inquirer = require('inquirer')
 program
   .version(require('../package').version, '-v, --version')
   .usage('<command> [options]')
+  .command('create', 'generate a new project from a template')
+  .command('dev', 'run a project in development')
+  .command('build', 'run a project in production')
 
 // 初始化项目
 program
-  .command('create', 'generate a new project from a template')
+  .command('create')
   .action((dir, cmd) => {
     const prompt = inquirer.createPromptModule()
     const questions = [{
       type: 'input',
       name: 'name',
-      message: 'please input your project name',
-      validate: function(input) {
-        if(!input) {
-          return 'project name is required'
-        } else {
-          return true
-        }
-      }
+      message: 'please input your project name'
     }, {
       type: 'list',
       name: 'library',
@@ -45,14 +41,14 @@ program
 
 // 项目构建-测试环境
 program
-  .command('dev', 'run a project in development')
+  .command('dev')
   .action((dir, cmd) => {
     require('../commands/dev.js')(dir, cmd)
   })
 
 // 项目构建-测试环境
 program
-  .command('build', 'run a project in production')
+  .command('build')
   .action((dir, cmd) => {
     require('../commands/build.js')(dir, cmd)
   })
