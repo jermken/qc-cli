@@ -63,6 +63,7 @@ module.exports = {
             chunks: ['index'],
             env: process.env.NODE_ENV,
             inject: process.env.NODE_ENV === 'development'? false : true,
+            favicon: path.resolve(process.env._CWD, './src/entry/favicon.ico'),
             meta: {
                 viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
             }
