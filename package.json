@@ -4,6 +4,10 @@
   "description": "this is a cli for front-end project",
   "scripts": {
     "dev": "node ./bin/qc",
+    "v-l": "npm version major",
+    "v-m": "npm version minor",
+    "v-s": "npm version patch",
+    "release": "npm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -42,7 +46,6 @@
     "commander": "^2.19.0",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
-    "download-git-repo": "^1.1.0",
     "file-loader": "^2.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "fs-extra": "^7.0.1",

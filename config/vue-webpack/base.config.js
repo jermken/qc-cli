@@ -1,7 +1,9 @@
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const htmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const babelOptions = require('../common/babel_options')()
+const qcConfig = require(path.resolve(process.env._CWD, './qc.config.json'))
 
 module.exports = {
     entry: {
@@ -53,7 +55,18 @@ module.exports = {
         ]
     },
     plugins:[
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new htmlWebpackPlugin({
+            title: qcConfig.title,
+            filename: './index.html',
+            template: path.resolve(process.env._CWD, './src/entry/index.html'),
+            chunks: ['index'],
+            env: process.env.NODE_ENV,
+            inject: process.env.NODE_ENV === 'development'? false : true,
+            meta: {
+                viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
+            }
+        })
     ],
     resolve: {
         extensions: ['.vue', '.js'],

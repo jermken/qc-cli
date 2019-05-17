@@ -1,12 +1,10 @@
 const path = require('path')
 const merge = require('webpack-merge')
-const htmlWebpackPlugin = require('html-webpack-plugin')
 const cleanWebpackPlugin = require('clean-webpack-plugin')
 const baseConf = require('./base.config')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const qcConfig = require(path.resolve(process.env._CWD, './qc.config.json'))
 
 module.exports = merge(baseConf, {
     mode: process.env.NODE_ENV,
@@ -22,17 +20,6 @@ module.exports = merge(baseConf, {
         new MiniCssExtractPlugin({
             filename: 'css/main.[hash:8].css',
             chunkFilename: 'css/[name].[hash:8].css'
-        }),
-        new htmlWebpackPlugin({
-            title: qcConfig.title,
-            filename: 'index.html',
-            template: path.join(process.env._CWD, './src/entry/index.html'),
-            chunks: ['index'],
-            env: process.env.NODE_ENV,
-            inject: true,
-            meta: {
-                viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no'
-            }
         })
     ],
     optimization: {
