@@ -20,7 +20,14 @@ program
     const questions = [{
       type: 'input',
       name: 'name',
-      message: 'please input your project name'
+      message: 'please input your project name',
+      validate:(val) => {
+        if(val === '') {
+          return 'project name is required'
+        } else {
+          return true
+        }
+      }
     }, {
       type: 'list',
       name: 'library',

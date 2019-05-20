@@ -17,7 +17,7 @@ let create = {
     },
     generator: function(config) {
         let { name, library, tool } = config
-        if(!fs.existsSync(path.resolve(__dirname, `../template/${library}-${tool}`))) {
+        if(!fs.existsSync(path.resolve(__dirname, `../node_modules/@jermken/qc-${library}-${tool}-seed/template`))) {
             return logger.error(`template <${library}-${tool}> is not yet supported`)
         }
         if (fs.existsSync(path.join(process.env._CWD, `/${name}`))) {
@@ -29,9 +29,9 @@ let create = {
             } else {
                 let spinner = ora('project generating...')
                 spinner.start()
-                copyTpl(path.resolve(__dirname, `../template/${library}-${tool}`), path.join(process.env._CWD, `/${name}`)).then(() => {
+                copyTpl(path.resolve(__dirname, '../node_modules/@jermken/qc-vue-webpack-seed/template'), path.join(process.env._CWD, `/${name}`)).then(() => {
                     spinner.succeed()
-                    logger.success('project generated successfully')
+                    logger.success(`project generated successfully, please cd ${name}`)
                     this.qcConfigInit({title: name})
                 }).catch(err => {
                     spinner.fail()

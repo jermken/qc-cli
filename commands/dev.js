@@ -3,12 +3,11 @@ const fs = require('fs')
 const logger = require('../lib/util/logger')
 process.env.NODE_ENV = 'development'
 process.env._CWD = process.cwd()
-const { devVueWebpack } = require('../config/vue-webpack/index')
 class DevCompiler {
     constructor(config) {
         this.config = config || {}
         this.configFileMap = {
-            'vue-webpack': devVueWebpack
+            'vue-webpack': require('@jermken/qc-vue-webpack-seed').devRun
         }
     }
     run() {
