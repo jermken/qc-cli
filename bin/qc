@@ -32,7 +32,7 @@ program
       type: 'list',
       name: 'library',
       message: 'select a library for your project',
-      choices: ['vue']
+      choices: ['vue', 'react']
     }, {
       type: 'list',
       name: 'tool',
