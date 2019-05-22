@@ -35,7 +35,12 @@ let create = {
                 logger.log(data.toString())
             })
             _spawn.stderr.on('data', (data) => {
-                logger.error(data.toString())
+                let info = data.toString()
+                if(info.indexOf('error') > -1 || info.indexOf('ERROR') > -1) {
+                    logger.error(info)
+                } else if(info.indexOf('warn') > -1 || info.indexOf('WARN') > -1) {
+                    logger.warn(info)
+                }
             })
             _spawn.on('close', (code) => {
                 if(code === 0) {
