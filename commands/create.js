@@ -34,6 +34,9 @@ let create = {
             _spawn.stdout.on('data', (data) => {
                 logger.log(data.toString())
             })
+            _spawn.stderr.on('data', (data) => {
+                logger.error(data.toString())
+            })
             _spawn.on('close', (code) => {
                 if(code === 0) {
                     spinner.succeed()
