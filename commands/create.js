@@ -8,22 +8,32 @@ const { copyTpl } = require('../lib/util')
 process.env._CWD = process.cwd()
 
 let create = {
+    isGitRepos: false,
     qcConfigInit: function(config) {
-        let congfigUrl = path.resolve(process.env._CWD, `./${config.title}/qc.config.json`)
+        let congfigUrl;
+        if(this.isGitRepos) {
+            congfigUrl = path.resolve(process.env._CWD, `./qc.config.json`)
+        } else {
+            congfigUrl = path.resolve(process.env._CWD, `./${config.title}/qc.config.json`)
+        }
         let qcConfig = require(congfigUrl)
         qcConfig = { ...qcConfig, ...config}
         fs.writeFile(path.resolve(congfigUrl), JSON.stringify(qcConfig), 'utf-8', err => {
             if(err) logger.error(err)
         })
     },
+    /**
+     *
+     * @param {*} config project config
+     */
     generator: function(config) {
         let { name, library, tool } = config
         if(!require('../config/tpl.json')[`qc-${library}-${tool}-seed`]) {
             return logger.error(`template <${library}-${tool}> is not yet supported`)
         }
-        if (fs.existsSync(path.join(process.env._CWD, `/${name}`))) {
-            rimraf.sync(path.join(process.env._CWD, `/${name}`))
-        }
+        // judge the cwd is a git repository?
+        if(fs.existsSync(path.join(process.env._CWD, `/.git`))) this.isGitRepos = true
+
         if(require('../package.json').dependencies[`@jermken/qc-${library}-${tool}-seed`]) {
             this.mkdir(name, library, tool)
         } else {
@@ -52,7 +62,29 @@ let create = {
             })
         }
     },
+    /**
+     *
+     * @param {String} name the project name
+     * @param {String} library a framework which you will use in your project
+     * @param {String} tool a packer tool which you will use in your project
+     */
     mkdir: function(name, library, tool) {
+        if(this.isGitRepos) {
+            let _spinner = ora('project generating...')
+            _spinner.start()
+            copyTpl(path.resolve(__dirname, `../node_modules/@jermken/qc-${library}-${tool}-seed/template`), process.env._CWD).then(() => {
+                _spinner.succeed()
+                logger.success(`project generated successfully, you can run <qc dev> to start your development`)
+                this.qcConfigInit({title: name})
+            }).catch(err => {
+                _spinner.fail()
+                logger.error(err)
+            })
+            return
+        }
+        if (fs.existsSync(path.join(process.env._CWD, `/${name}`))) {
+            rimraf.sync(path.join(process.env._CWD, `/${name}`))
+        }
         fs.mkdir(path.join(process.env._CWD, `/${name}`), (err) => {
             if (err) {
                 logger.error(err)
@@ -61,7 +93,7 @@ let create = {
                 _spinner.start()
                 copyTpl(path.resolve(__dirname, `../node_modules/@jermken/qc-${library}-${tool}-seed/template`), path.join(process.env._CWD, `/${name}`)).then(() => {
                     _spinner.succeed()
-                    logger.success(`project generated successfully, please cd ${name}`)
+                    logger.success(`project generated successfully, please cd ${name} ,and you can run <qc dev> to start your development`)
                     this.qcConfigInit({title: name})
                 }).catch(err => {
                     _spinner.fail()
