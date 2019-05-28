@@ -2,20 +2,21 @@ const path = require('path')
 const fs = require('fs')
 const { spawn } = require('child_process')
 const ora = require('ora')
+const tplMap = require('../config/tpl.json')
 const logger = require('../lib/util/logger')
+
 process.env.NODE_ENV = 'development'
 process.env._CWD = process.cwd()
 class DevCompiler {
     constructor(config) {
         this.config = config || {}
-        this.configFileMap = {
-            'vue-webpack': require('@jermken/qc-vue-webpack-seed').devRun
-        }
+        let { lib, packer } = this.config
+        this.seed = `qc-${lib}-${packer}-seed`
     }
     run() {
         let { lib, packer } = this.config
-        if(!this.configFileMap[`${lib}-${packer}`]) return logger.error(`${lib}-${packer}: does not exist in configFileMap`)
-        this.configFileMap[`${lib}-${packer}`]()
+        if(!tplMap[this.seed]) return logger.error(`${lib}-${packer}: does not supported`)
+        require(`@jermken/${tplMap[this.seed]}`).devRun()
     }
 }
 
@@ -23,16 +24,18 @@ module.exports = (entry, cmd) => {
     let config;
     let configUrl = path.resolve(process.env._CWD, './qc.config.json')
     let qcPackage = require('../package.json')
+    let seed;
     if(fs.existsSync(configUrl)) {
         config = require(configUrl)
+        seed = `qc-${config.lib}-${config.packer}-seed`
     } else {
         return logger.error(`file:${configUrl} is not found`)
     }
-    if(!qcPackage.dependencies[`@jermken/qc-${config.lib}-${config.packer}-seed`]) {
+    if(!qcPackage.dependencies[`@jermken/${tplMap[seed]}`]) {
         let dir = path.resolve(__dirname, '../')
         let spinner = ora('qc-cli is updating... \n')
         spinner.start()
-        let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/qc-${config.lib}-${config.packer}-seed@latest --save`, {shell: true})
+        let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${tplMap[seed]}@latest --save`, {shell: true})
         _spawn.stdout.on('data', (data) => {
             logger.log(data.toString())
         })

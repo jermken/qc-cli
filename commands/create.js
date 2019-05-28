@@ -4,21 +4,24 @@ const path = require('path')
 const rimraf = require('rimraf')
 const { spawn } = require('child_process')
 const ora = require('ora')
+const tplMap = require('../config/tpl.json')
 const { copyTpl } = require('../lib/util')
 process.env._CWD = process.cwd()
 
 let create = {
     isGitRepos: false,
     qcConfigInit: function(config) {
-        let congfigUrl;
+        let congfigUrl, packageUrl;
         if(this.isGitRepos) {
             congfigUrl = path.resolve(process.env._CWD, `./qc.config.json`)
+            packageUrl = path.resolve(process.env._CWD, `./package.json`)
         } else {
             congfigUrl = path.resolve(process.env._CWD, `./${config.title}/qc.config.json`)
+            packageUrl = path.resolve(process.env._CWD, `./${config.title}/package.json`)
         }
-        let qcConfig = require(congfigUrl)
-        qcConfig = { ...qcConfig, ...config}
-        fs.writeFile(path.resolve(congfigUrl), JSON.stringify(qcConfig), 'utf-8', err => {
+        let packageInfo = require(packageUrl)
+        packageInfo.name = config.title
+        fs.writeFile(path.resolve(packageUrl), JSON.stringify(packageInfo), 'utf-8', err => {
             if(err) logger.error(err)
         })
     },
@@ -27,20 +30,21 @@ let create = {
      * @param {*} config project config
      */
     generator: function(config) {
-        let { name, library, tool } = config
-        if(!require('../config/tpl.json')[`qc-${library}-${tool}-seed`]) {
-            return logger.error(`template <${library}-${tool}> is not yet supported`)
+        let { name, lib, packer } = config
+        let seed = `qc-${lib}-${packer}-seed`
+        if(!tplMap[seed]) {
+            return logger.error(`template <${lib}-${packer}> is not yet supported`)
         }
         // judge the cwd is a git repository?
         if(fs.existsSync(path.join(process.env._CWD, `/.git`))) this.isGitRepos = true
 
-        if(require('../package.json').dependencies[`@jermken/qc-${library}-${tool}-seed`]) {
-            this.mkdir(name, library, tool)
+        if(require('../package.json').dependencies[`@jermken/${tplMap[seed]}`]) {
+            this.mkdir(name, lib, packer)
         } else {
             let dir = path.resolve(__dirname, '../')
             let spinner = ora('project template loading... \n')
             spinner.start()
-            let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/qc-${library}-${tool}-seed@latest --save`, {shell: true})
+            let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${tplMap[seed]}@latest --save`, {shell: true})
             _spawn.stdout.on('data', (data) => {
                 logger.log(data.toString())
             })
@@ -55,7 +59,7 @@ let create = {
             _spawn.on('close', (code) => {
                 if(code === 0) {
                     spinner.succeed()
-                    this.mkdir(name, library, tool)
+                    this.mkdir(name, lib, packer)
                 } else {
                     spinner.fail()
                 }
@@ -65,14 +69,15 @@ let create = {
     /**
      *
      * @param {String} name the project name
-     * @param {String} library a framework which you will use in your project
-     * @param {String} tool a packer tool which you will use in your project
+     * @param {String} lib a framework which you will use in your project
+     * @param {String} packer a packer tool which you will use in your project
      */
-    mkdir: function(name, library, tool) {
+    mkdir: function(name, lib, packer) {
+        let seed = `qc-${lib}-${packer}-seed`
         if(this.isGitRepos) {
             let _spinner = ora('project generating...')
             _spinner.start()
-            copyTpl(path.resolve(__dirname, `../node_modules/@jermken/qc-${library}-${tool}-seed/template`), process.env._CWD).then(() => {
+            copyTpl(path.resolve(__dirname, `../node_modules/@jermken/${tplMap[seed]}/template/${lib}-${packer}`), process.env._CWD).then(() => {
                 _spinner.succeed()
                 logger.success(`project generated successfully, you can run <qc dev> to start your development`)
                 this.qcConfigInit({title: name})
@@ -91,7 +96,7 @@ let create = {
             } else {
                 let _spinner = ora('project generating...')
                 _spinner.start()
-                copyTpl(path.resolve(__dirname, `../node_modules/@jermken/qc-${library}-${tool}-seed/template`), path.join(process.env._CWD, `/${name}`)).then(() => {
+                copyTpl(path.resolve(__dirname, `../node_modules/@jermken/${tplMap[seed]}/template/${lib}-${packer}`), path.join(process.env._CWD, `/${name}`)).then(() => {
                     _spinner.succeed()
                     logger.success(`project generated successfully, please cd ${name} ,and you can run <qc dev> to start your development`)
                     this.qcConfigInit({title: name})

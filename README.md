@@ -18,3 +18,13 @@ qc dev
 ```
 qc build
 ```
+## 注意
+
+* 项目下的qc.config.json 文件中 lib 和 packer 字段不可修改
+```
+{
+    "lib": "vue", // lib字段不可修改
+    "packer": "parcel", // packer字段不可修改
+    "openPage": "index" // 在开发环境下运行 qc dev 打开的页面
+}
+```

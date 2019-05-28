@@ -4,6 +4,8 @@ const fs = require('fs')
 const path = require('path')
 const logger = require('../lib/util/logger')
 const inquirer = require('inquirer')
+const { LIBLIST, PACKERLIST} = require('../config/globalConst')
+
 // 定义当前版本
 // 定义使用方法
 // 定义指令
@@ -24,14 +26,14 @@ program
     if(fs.existsSync(path.join(process.cwd(), `/.git`))) {
       questions = [{
         type: 'list',
-        name: 'library',
+        name: 'lib',
         message: 'select a library for your project',
-        choices: ['vue', 'react']
+        choices: LIBLIST
       }, {
         type: 'list',
-        name: 'tool',
+        name: 'packer',
         message: 'select a packer tool for your project',
-        choices: ['webpack']
+        choices: PACKERLIST
       }]
     } else {
       questions = [{
@@ -47,14 +49,14 @@ program
         }
       }, {
         type: 'list',
-        name: 'library',
+        name: 'lib',
         message: 'select a library for your project',
-        choices: ['vue', 'react']
+        choices: LIBLIST
       }, {
         type: 'list',
-        name: 'tool',
+        name: 'packer',
         message: 'select a packer tool for your project',
-        choices: ['webpack']
+        choices: PACKERLIST
       }]
     }
     prompt(questions).then((data) => {
