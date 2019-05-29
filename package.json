@@ -32,6 +32,8 @@
   ],
   "homepage": "https://github.com/jermken/qc-cli#readme",
   "dependencies": {
+    "@jermken/qc-parcel-seed": "^0.1.2",
+    "@jermken/qc-vue-webpack-seed": "^0.2.2",
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "fs-extra": "^7.0.1",
