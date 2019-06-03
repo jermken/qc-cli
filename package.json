@@ -32,6 +32,7 @@
   ],
   "homepage": "https://github.com/jermken/qc-cli#readme",
   "dependencies": {
+    "acorn": "^6.1.1",
     "@jermken/qc-parcel-seed": "^0.1.2",
     "@jermken/qc-vue-webpack-seed": "^0.2.4",
     "chalk": "^2.4.2",
@@ -40,8 +41,5 @@
     "inquirer": "^6.2.2",
     "ora": "^3.2.0",
     "rimraf": "^2.6.3"
-  },
-  "devDependencies": {
-    "acorn": "^6.1.1"
   }
 }
