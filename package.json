@@ -1,6 +1,6 @@
 {
   "name": "@jermken/qc-cli",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "this is a cli for front-end project",
   "scripts": {
     "dev": "node ./bin/qc",
