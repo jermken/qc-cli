@@ -6,7 +6,7 @@ const tplMap = require('../config/tpl.json')
 const logger = require('../lib/util/logger')
 
 process.env.NODE_ENV = 'development'
-process.env._CWD = process.cwd()
+process.env.CWD = process.cwd()
 class DevCompiler {
     constructor(config) {
         this.config = config || {}
@@ -22,7 +22,7 @@ class DevCompiler {
 
 module.exports = (entry, cmd) => {
     let config;
-    let configUrl = path.resolve(process.env._CWD, './qc.config.json')
+    let configUrl = path.resolve(process.env.CWD, './config.js')
     let qcPackage = require('../package.json')
     let seed;
     if(fs.existsSync(configUrl)) {
