@@ -20,23 +20,26 @@ program
 program
   .command('create')
   .action((dir, cmd) => {
-    let questions;
     const prompt = inquirer.createPromptModule()
     // judge the cwd is a git repository?
-    if(fs.existsSync(path.join(process.cwd(), `/.git`))) {
-      questions = [{
-        type: 'list',
-        name: 'lib',
-        message: 'select a library for your project',
-        choices: LIBLIST
-      }, {
-        type: 'list',
-        name: 'packer',
-        message: 'select a packer tool for your project',
-        choices: PACKERLIST
-      }]
-    } else {
-      questions = [{
+    let questions = [{
+      type: 'list',
+      name: 'lib',
+      message: 'select a library for your project',
+      choices: LIBLIST
+    }, {
+      type: 'list',
+      name: 'packer',
+      message: 'select a packer tool for your project',
+      choices: PACKERLIST
+    }, {
+      type: 'list',
+      name: 'typescript',
+      message: 'is a typescript project?',
+      choices: ['false', 'true']
+    }]
+    if(!fs.existsSync(path.join(process.cwd(), `/.git`))) {
+      questions.unshift({
         type: 'input',
         name: 'name',
         message: 'please input your project name',
@@ -47,17 +50,7 @@ program
             return true
           }
         }
-      }, {
-        type: 'list',
-        name: 'lib',
-        message: 'select a library for your project',
-        choices: LIBLIST
-      }, {
-        type: 'list',
-        name: 'packer',
-        message: 'select a packer tool for your project',
-        choices: PACKERLIST
-      }]
+      })
     }
     prompt(questions).then((data) => {
       data.name = data.name || path.basename(process.cwd())

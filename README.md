@@ -28,6 +28,12 @@ qc build
     "openPage": "index" // 在开发环境下运行 qc dev 打开的页面
 }
 ```
+* vue-ts项目中类型为了避免ide报错需要将类型声明文件放在src目录下，且declare module 与 declare global 模块需放在单独的文件中如下：
+```
+    -src
+        -vue-shims.m.ts // 放置模块声明
+        -vue-shims.g.ts // 放置全局声明
+```
 ## 问题
 * 遇到了一个webpack打包懒加载的问题
 ```
