@@ -74,7 +74,7 @@ let create = {
         let { name, lib, packer, typescript } = options
         let seed = `qc-${lib}-${packer}-seed`
         let tplPath = typescript === 'true' ? `${tplMap[seed]}/template/${lib}-${packer}-ts` : `${tplMap[seed]}/template/${lib}-${packer}`
-        if(!fs.existsSync(tplPath)) {
+        if(!fs.existsSync(path.resolve(__dirname, `../node_modules/@jermken/${tplPath}`))) {
             return logger.error(`暂不支持 ${lib}-${packer}-ts 类型项目`)
         }
         if(this.isGitRepos) {
