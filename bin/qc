@@ -12,6 +12,8 @@ const { LIBLIST, PACKERLIST} = require('../config/globalConst')
 program
   .version(require('../package').version, '-v, --version')
   .usage('<command> [options]')
+
+program
   .command('create')
   .description('generate a new project from a template')
   .action((dir, cmd) => {
@@ -76,10 +78,16 @@ program
     require('../commands/build.js')(dir, cmd)
   })
 
-let initCommander = process.argv[2]
-if(initCommander && !/(create|dev|build|-v|-h|--version|--help)/.test(initCommander)) {
-  logger.error(`command:  qc ${initCommander} is not supported`)
-  process.exit(1)
-}
+program
+  .arguments('<command>')
+  .action(cmd => {
+    program.outputHelp()
+    logger.error(` Unknown command ${cmd}.`)
+  })
+
 // 解析命令行参数
 program.parse(process.argv)
+
+if(!process.argv.slice(2).length) {
+  program.outputHelp()
+}
