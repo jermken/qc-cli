@@ -13,14 +13,14 @@ class DevCompiler {
         let { lib, packer } = this.config
         this.seed = `qc-${lib}-${packer}-seed`
     }
-    run() {
+    run(options) {
         let { lib, packer } = this.config
         if(!tplMap[this.seed]) return logger.error(`${lib}-${packer}: does not supported`)
-        require(`@jermken/${tplMap[this.seed]}`).devRun()
+        require(`@jermken/${tplMap[this.seed]}`).devRun(options)
     }
 }
 
-module.exports = (entry, cmd) => {
+module.exports = (entry, options) => {
     let config;
     let configUrl = path.resolve(process.env.CWD, './config.js')
     let qcPackage = require('../package.json')
@@ -42,12 +42,12 @@ module.exports = (entry, cmd) => {
         _spawn.on('close', (code) => {
             if(code === 0) {
                 spinner.succeed()
-                new DevCompiler(config).run()
+                new DevCompiler(config).run(options)
             } else {
                 spinner.fail()
             }
         })
     } else {
-        new DevCompiler(config).run()
+        new DevCompiler(config).run(options)
     }
 }

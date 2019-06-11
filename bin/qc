@@ -12,13 +12,8 @@ const { LIBLIST, PACKERLIST} = require('../config/globalConst')
 program
   .version(require('../package').version, '-v, --version')
   .usage('<command> [options]')
-  .command('create', 'generate a new project from a template')
-  .command('dev', 'run a project in development')
-  .command('build', 'run a project in production')
-
-// 初始化项目
-program
   .command('create')
+  .description('generate a new project from a template')
   .action((dir, cmd) => {
     const prompt = inquirer.createPromptModule()
     // judge the cwd is a git repository?
@@ -60,16 +55,23 @@ program
     })
   })
 
-// 项目构建-测试环境
 program
   .command('dev')
+  .description('run a project in development')
+  .option('-w, --watch', 'watch for file changes')
+  .option('-s, --silent', 'whether to print the build log')
   .action((dir, cmd) => {
-    require('../commands/dev.js')(dir, cmd)
+    cmd = cmd || {}
+    let options = {
+      watch: cmd.watch ? process.argv[4] !== 'false' : true,
+      silent: cmd.silent && process.argv[4] === 'true'
+    }
+    require('../commands/dev.js')(dir, options)
   })
 
-// 项目构建-测试环境
 program
   .command('build')
+  .description('run a project in production')
   .action((dir, cmd) => {
     require('../commands/build.js')(dir, cmd)
   })
