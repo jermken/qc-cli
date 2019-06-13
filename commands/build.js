@@ -14,7 +14,7 @@ class ProdCompiler {
     }
     run() {
         let { lib, packer } = this.config
-        if(!SEEDLIST.includes[this.seed]) return logger.error(`${lib}-${packer}: does not supported`)
+        if(!SEEDLIST.includes(this.seed)) return logger.error(`${lib}-${packer}: does not supported`)
         require(`@jermken/${this.seed}`).prodRun()
     }
 }
