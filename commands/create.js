@@ -4,8 +4,8 @@ const path = require('path')
 const rimraf = require('rimraf')
 const { spawn } = require('child_process')
 const ora = require('ora')
-const tplMap = require('../config/tpl.json')
 const { copyTpl } = require('../lib/util')
+const { SEEDLIST } = require('../config/globalConst')
 process.env.CWD = process.cwd()
 
 let create = {
@@ -29,20 +29,19 @@ let create = {
      */
     generator: function(config) {
         let { lib, packer } = config
-        let seed = `qc-${lib}-${packer}-seed`
-        if(!tplMap[seed]) {
+        let seed = `qc-${packer}-seed`
+        if(!SEEDLIST.includes(seed)) {
             return logger.error(`template <${lib}-${packer}> is not yet supported`)
         }
         // judge the cwd is a git repository?
         if(fs.existsSync(path.join(process.env.CWD, `/.git`))) this.isGitRepos = true
-
-        if(require('../package.json').dependencies[`@jermken/${tplMap[seed]}`]) {
+        if(require('../package.json').dependencies[`@jermken/${seed}`]) {
             this.mkdir(config)
         } else {
             let dir = path.resolve(__dirname, '../')
             let spinner = ora('project template loading... \n')
             spinner.start()
-            let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${tplMap[seed]}@latest --save`, {shell: true})
+            let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${seed}@latest --save`, {shell: true})
             _spawn.stdout.on('data', (data) => {
                 logger.log(data.toString())
             })
@@ -72,8 +71,8 @@ let create = {
      */
     mkdir: function(options) {
         let { name, lib, packer, typescript } = options
-        let seed = `qc-${lib}-${packer}-seed`
-        let tplPath = typescript === 'true' ? `${tplMap[seed]}/template/${lib}-${packer}-ts` : `${tplMap[seed]}/template/${lib}-${packer}`
+        let seed = `qc-${packer}-seed`
+        let tplPath = typescript === 'true' ? `${seed}/template/${lib}-${packer}-ts` : `${seed}/template/${lib}-${packer}`
         if(!fs.existsSync(path.resolve(__dirname, `../node_modules/@jermken/${tplPath}`))) {
             return logger.error(`暂不支持 ${lib}-${packer}-ts 类型项目`)
         }

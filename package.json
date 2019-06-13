@@ -4,7 +4,7 @@
   "description": "this is a cli for front-end project",
   "scripts": {
     "dev": "node ./bin/qc",
-    "update": "npm install @jermken/qc-vue-webpack-seed @jermken/qc-parcel-seed --save",
+    "update": "npm install @jermken/qc-webpack-seed @jermken/qc-parcel-seed --save",
     "v-l": "npm version major",
     "v-m": "npm version minor",
     "v-s": "npm version patch",
@@ -28,13 +28,16 @@
     "cli",
     "qc",
     "vue",
+    "react",
     "webpack",
+    "vue-typescript",
+    "react-typescript",
     "spa"
   ],
   "homepage": "https://github.com/jermken/qc-cli#readme",
   "dependencies": {
-    "@jermken/qc-parcel-seed": "^0.1.4",
-    "@jermken/qc-vue-webpack-seed": "^0.2.9",
+    "@jermken/qc-parcel-seed": "^0.1.5",
+    "@jermken/qc-webpack-seed": "^0.1.0",
     "acorn": "^6.1.1",
     "chalk": "^2.4.2",
     "commander": "^2.19.0",

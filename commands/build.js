@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const { spawn } = require('child_process')
 const ora = require('ora')
-const tplMap = require('../config/tpl.json')
+const { SEEDLIST } = require('../config/globalConst')
 const logger = require('../lib/util/logger')
 
 process.env.NODE_ENV = 'production'
@@ -10,12 +10,12 @@ process.env.CWD = process.cwd()
 class ProdCompiler {
     constructor(config) {
         this.config = config || {}
-        this.seed = `qc-${this.config.lib}-${this.config.packer}-seed`
+        this.seed = `qc-${this.config.packer}-seed`
     }
     run() {
         let { lib, packer } = this.config
-        if(!tplMap[this.seed]) return logger.error(`${lib}-${packer}: does not supported`)
-        require(`@jermken/${tplMap[this.seed]}`).prodRun()
+        if(!SEEDLIST.includes[this.seed]) return logger.error(`${lib}-${packer}: does not supported`)
+        require(`@jermken/${this.seed}`).prodRun()
     }
 }
 
@@ -26,15 +26,15 @@ module.exports = (entry, cmd) => {
     let seed;
     if(fs.existsSync(configUrl)) {
         config = require(configUrl)
-        seed = `qc-${config.lib}-${config.packer}-seed`
+        seed = `qc-${config.packer}-seed`
     } else {
         return logger.error(`file:${configUrl} is not found`)
     }
-    if(!qcPackage.dependencies[`@jermken/${tplMap[seed]}`]) {
+    if(!qcPackage.dependencies[`@jermken/${seed}`]) {
         let dir = path.resolve(__dirname, '../')
         let spinner = ora('qc-cli is updating... \n')
         spinner.start()
-        let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${tplMap[seed]}@latest --save`, {shell: true})
+        let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${seed}@latest --save`, {shell: true})
         _spawn.stdout.on('data', (data) => {
             logger.log(data.toString())
         })
