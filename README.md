@@ -1,7 +1,7 @@
 # qc-cli
 this is a cli for front-end project
 ## 脚手架安装
-npm install qc-cli -g
+npm install @jermken/qc-cli -g
 ## 项目创建
 
 ```
