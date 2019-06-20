@@ -35,7 +35,6 @@ qc build
         -vue-shims.m.ts // 放置模块声明
         -vue-shims.g.ts // 放置全局声明
 ```
-* ts项目在创建后需先运行 npm install 再跑构建命令
 
 * 自定义配置在config.js文件中，分为 dev和prod 模式，其中配置项根据使用的打包工具而定，使用webpack构建的需要按照webpack的配置格式，
   使用parcel构建的需要按照parcel的配置格式

@@ -37,7 +37,7 @@
   "homepage": "https://github.com/jermken/qc-cli#readme",
   "dependencies": {
     "@jermken/qc-parcel-seed": "^0.1.6",
-    "@jermken/qc-webpack-seed": "^0.1.1",
+    "@jermken/qc-webpack-seed": "^0.1.2",
     "acorn": "^6.1.1",
     "chalk": "^2.4.2",
     "commander": "^2.19.0",

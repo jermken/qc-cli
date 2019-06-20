@@ -20,7 +20,12 @@ let create = {
         let packageInfo = require(packageUrl)
         packageInfo.name = config.title
         fs.writeFile(path.resolve(packageUrl), JSON.stringify(packageInfo), 'utf-8', err => {
-            if(err) logger.error(err)
+            if(err) {
+                logger.error(err)
+                process.exit(1)
+            } else {
+                process.exit(0)
+            }
         })
     },
     /**

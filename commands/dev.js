@@ -10,7 +10,7 @@ process.env.CWD = process.cwd()
 class DevCompiler {
     constructor(config) {
         this.config = config || {}
-        let { lib, packer } = this.config
+        let { packer } = this.config
         this.seed = `qc-${packer}-seed`
     }
     run(options) {
@@ -46,21 +46,22 @@ module.exports = (entry, options) => {
         return logger.error(`file:${configUrl} is not found`)
     }
     if(!qcPackage.dependencies[`@jermken/${seed}`]) {
-        let dir = path.resolve(__dirname, '../')
-        let spinner = ora('qc-cli is updating... \n')
-        spinner.start()
-        let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${seed}@latest --save`, {shell: true})
-        _spawn.stdout.on('data', (data) => {
-            logger.log(data.toString())
-        })
-        _spawn.on('close', (code) => {
-            if(code === 0) {
-                spinner.succeed()
-                new DevCompiler(config).run(options)
-            } else {
-                spinner.fail()
-            }
-        })
+        // TODO: 暂未兼容linux系统 暂时关闭，后期可优化。
+        // let dir = path.resolve(__dirname, '../')
+        // let spinner = ora('qc-cli is updating... \n')
+        // spinner.start()
+        // let _spawn = spawn(`${dir.substr(0,2)} && cd ${dir} && npm install @jermken/${seed}@latest --save`, {shell: true})
+        // _spawn.stdout.on('data', (data) => {
+        //     logger.log(data.toString())
+        // })
+        // _spawn.on('close', (code) => {
+        //     if(code === 0) {
+        //         spinner.succeed()
+        //         new DevCompiler(config).run(options)
+        //     } else {
+        //         spinner.fail()
+        //     }
+        // })
     } else {
         new DevCompiler(config).run(options)
     }
