@@ -15,7 +15,20 @@ class ProdCompiler {
     run() {
         let { lib, packer } = this.config
         if(!SEEDLIST.includes(this.seed)) return logger.error(`${lib}-${packer}: does not supported`)
-        require(`@jermken/${this.seed}`).prodRun()
+        // need run npm install before run qc dev?
+        if(fs.existsSync(path.resolve(process.env.CWD, './node_modules'))) {
+            require(`@jermken/${this.seed}`).prodRun()
+        } else {
+            let _spawn = spawn(`cd ${process.env.CWD} && npm install`, {shell: true})
+            _spawn.stdout.on('data', (data) => {
+                logger.log(data.toString())
+            })
+            _spawn.on('close', (code) => {
+                if(code === 0) {
+                    require(`@jermken/${this.seed}`).prodRun()
+                }
+            })
+        }
     }
 }
 
