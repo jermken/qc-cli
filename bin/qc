@@ -6,6 +6,20 @@ const logger = require('../lib/util/logger')
 const inquirer = require('inquirer')
 const { LIBLIST, PACKERLIST} = require('../config/globalConst')
 
+const getCommandOptions = (argv = []) => {
+  let option = {}
+  argv.filter((i) => i.indexOf('=')>-1 && /^--/.test(i)).forEach((i) => {
+    let opt = i.replace(/--/g, '').split('=')
+    if(opt[1] === 'false') {
+      option[opt[0]] = false
+    } else if(opt[1] === 'true') {
+      option[opt[0]] = true
+    } else {
+      option[opt[0]] = opt[1]
+    }
+  })
+  return option
+}
 // 定义当前版本
 // 定义使用方法
 // 定义指令
@@ -63,19 +77,26 @@ program
   .option('-w, --watch', 'watch for file changes')
   .option('-s, --silent', 'whether to print the build log')
   .action((dir, cmd) => {
-    cmd = cmd || {}
-    let options = {
-      watch: cmd.watch ? process.argv[4] !== 'false' : true,
-      silent: cmd.silent && process.argv[4] === 'true'
+    let _options = getCommandOptions(process.argv)
+    let _default = {
+      watch: true,
+      silent: false
     }
+    let options = { ..._default, ..._options }
     require('../commands/dev.js')(dir, options)
   })
 
 program
   .command('build')
   .description('run a project in production')
+  .option('-u, --uglify', 'uglify the css and js')
   .action((dir, cmd) => {
-    require('../commands/build.js')(dir, cmd)
+    let _options = getCommandOptions(process.argv)
+    let _default = {
+      uglify: true
+    }
+    let options = { ..._default, ..._options }
+    require('../commands/build.js')(dir, options)
   })
 
 program
